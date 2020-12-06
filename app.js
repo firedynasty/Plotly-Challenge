@@ -2,12 +2,23 @@ var data_1 = {}
 
 d3.json("samples.json").then((d) => {
     //  Create the Traces
-    data_1 = d
+    data_1 = d;
     console.log(d);
     
+    var OtuID = d.samples[0].otu_ids.map(sure => 'otu ' + sure);
+    var SampleValues = d.samples[0].sample_values;
+    var sortedByOtuID = OtuID.sort((a,b) => b - a);
+    var sortedBySampleValues = SampleValues.sort((a,b) => b-a);
+
+    slicedByOtuID = sortedByOtuID.slice(0,10);
+    slicedBySampleValues = sortedBySampleValues.slice(0,10);
+
+    reversedByOtuID = slicedByOtuID.reverse();
+    reversedBySampleValues = slicedBySampleValues.reverse();
+
     var trace1 = {
-      y: d.samples[0].otu_ids.map(sure => 'otc ' + sure),
-      x: d.samples[0].sample_values,
+      y: reversedByOtuID,
+      x: reversedBySampleValues,
       type: 'bar',
       orientation: 'h'
     }
