@@ -4,6 +4,7 @@ d3.json("samples.json").then((d) => {
     //  Create the Traces
     data_1 = d;
     console.log(d);
+    console.log(data_1.names);
     
     var OtuID = d.samples[0].otu_ids.map(sure => 'otu ' + sure);
     var SampleValues = d.samples[0].sample_values;
@@ -16,6 +17,17 @@ d3.json("samples.json").then((d) => {
     reversedByOtuID = slicedByOtuID.reverse();
     reversedBySampleValues = slicedBySampleValues.reverse();
 
+    var select = document.getElementById("selDataset");
+    var options = data_1.names;
+    for (var i = 0; i < options.length; i++ ) {
+      var opt = options[i];
+      var el = document.createElement("option");
+      el.text = opt;
+      el.value = opt;
+      select.add(el);
+    }
+
+    
     var trace1 = {
       y: reversedByOtuID,
       x: reversedBySampleValues,
@@ -27,6 +39,8 @@ d3.json("samples.json").then((d) => {
 
     Plotly.newPlot('plot1', data);
 
+
+    
     // // Create a trace object with the data in `y0`
     // var trace1 = {
     //   y: data.samples.,
