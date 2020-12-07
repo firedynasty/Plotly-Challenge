@@ -1,9 +1,11 @@
 var data_1 = {}
+var data_1Names = [];
 
 d3.json("samples.json").then((d) => {
     //  Create the Traces
     data_1 = d;
     console.log(d);
+    data_1Names = data_1.names;
     console.log(data_1.names);
     
     var OtuID = d.samples[0].otu_ids.map(sure => 'otu ' + sure);
@@ -27,7 +29,6 @@ d3.json("samples.json").then((d) => {
       select.add(el);
     }
 
-    
     var trace1 = {
       y: reversedByOtuID,
       x: reversedBySampleValues,
@@ -38,42 +39,30 @@ d3.json("samples.json").then((d) => {
     var data = [trace1]
 
     Plotly.newPlot('plot1', data);
-
-
-    
-    // // Create a trace object with the data in `y0`
-    // var trace1 = {
-    //   y: data.samples.,
-    //   // boxpoints: "all",
-    //   type: "box"
-    // };
-    
-    // // Create a trace object with the data in `y1`
-    // var trace2 = {
-    //   type: 'bar',
-    //   x: data
-    //   y: y1,
-    //   // boxpoints: "all",
-    //   type: "box"
-    // };
-    
-    // // Create a data array with the above two traces
-    // var data = [trace1, trace2];
-    
-    // // Use `layout` to define a title
-    // var layout = {
-    //   title: "Basic Box Plot"
-    // };
-    
-    // // Render the plot to the `plot1` div
-    // Plotly.newPlot("plot1", data, layout);
-
   
   });
 
+  d3.selectAll("body").on('change', getData);
 
-
-
-
-
+  function getData() {
+    var dropdownMenu = d3.selectAll('#selDataset').node();
+    var dropdownMenuID = dropdownMenu.id;
+    var selectedOption = dropdownMenu.value;
+    console.log(typeof selectedOption, selectedOption);
+    console.log(data_1Names.indexOf(selectedOption))
+    console.log(data_1Names)
+    // prints out the number 
   
+  }
+
+// I want to update the x and the y axis
+
+
+
+
+console.log(data_1Names.indexOf('941'))
+// okay cool 
+console.log(typeof selectedOption, selectedOption);
+// this returns a string
+
+
