@@ -1,3 +1,11 @@
+function toObject(arr) {
+  var rv = {};
+  for (var i = 0; i < arr.length; ++i)
+    if (arr[i] !== undefined) rv[i] = arr[i];
+  return rv;
+}
+// this will create a Javscript Object for reference later
+
 var data_1 = {}
 var data_1Names = [];
 var d1 = [];
@@ -11,15 +19,30 @@ d3.json("samples.json").then((d) => {
     console.log(data_1.names);
     // this is setting the variable of the array of participants
 
+    var otuLabels = d1.samples[0].otu_labels;
+    // this is list with the otuLabels
+    console.log(otuLabels);
+    
     var OtuID = d.samples[0].otu_ids.map(sure => 'otu ' + sure);
     // this is getting the variable name and id
+    // the reason why I needed to map was to add the word otu in front of the sample number
     
     var SampleValues = d.samples[0].sample_values;
     // this is getting the sample values of the bacteria numbers
 
+    var OtuLabels = d.samples[0].otu_labels;
+    // get the name of otulabels
+  
+    var textReference = toObject(OtuIDwithoutOtu);
+    // this will get your SampleValues into an Javascript Object
+    console.log(textReference);
+
     var sortedByOtuID = OtuID.sort((a,b) => b - a);
     var sortedBySampleValues = SampleValues.sort((a,b) => b-a);
+    var sortedByOtuIDwithoutOtu = OtuIDwithoutOtu.sort((a,b) => b - a);
     // computer, we only want the top 10 
+    // computer please save this sample into a javascript object so you can reference it
+
 
     slicedByOtuID = sortedByOtuID.slice(0,10);
     slicedBySampleValues = sortedBySampleValues.slice(0,10);
@@ -49,10 +72,11 @@ d3.json("samples.json").then((d) => {
       orientation: 'h'
     }
 
+
     var data = [trace1]
 
-    Plotly.newPlot('plot1', data);
-  
+    Plotly.newPlot('bar', data);
+   
   });
 
   d3.selectAll("body").on('change', getData);
@@ -84,8 +108,8 @@ d3.json("samples.json").then((d) => {
     reversedBySampleValuesRS = slicedBySampleValuesRS.reverse();
     // this is so that plotly can optimize the viewing
   
-    Plotly.restyle("plot1", "y", [reversedByOtuIDRS]);
-    Plotly.restyle("plot1", "x", [reversedBySampleValuesRS]);
+    Plotly.restyle("bar", "y", [reversedByOtuIDRS]);
+    Plotly.restyle("bar", "x", [reversedBySampleValuesRS]);
 
   }
 
