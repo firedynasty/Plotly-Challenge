@@ -6,6 +6,12 @@ function toObject(arr) {
 }
 // this will create a Javscript Object for reference later
 
+function getKeyByValue(object, value) {
+  return Object.keys(object).find(key => object[key] === value);
+}
+// this will allow the comptuer to find the value and then match it to the object set above
+
+
 var data_1 = {}
 var data_1Names = [];
 var d1 = [];
@@ -22,8 +28,8 @@ d3.json("samples.json").then((d) => {
     var otuLabels = d1.samples[0].otu_labels;
     // this is list with the otuLabels
     console.log(otuLabels);
-    
-    var OtuID = d.samples[0].otu_ids.map(sure => 'otu ' + sure);
+
+    var OtuID = d.samples[0].otu_ids;
     // this is getting the variable name and id
     // the reason why I needed to map was to add the word otu in front of the sample number
     
@@ -33,13 +39,9 @@ d3.json("samples.json").then((d) => {
     var OtuLabels = d.samples[0].otu_labels;
     // get the name of otulabels
   
-    var textReference = toObject(OtuIDwithoutOtu);
-    // this will get your SampleValues into an Javascript Object
-    console.log(textReference);
 
     var sortedByOtuID = OtuID.sort((a,b) => b - a);
     var sortedBySampleValues = SampleValues.sort((a,b) => b-a);
-    var sortedByOtuIDwithoutOtu = OtuIDwithoutOtu.sort((a,b) => b - a);
     // computer, we only want the top 10 
     // computer please save this sample into a javascript object so you can reference it
 
@@ -52,9 +54,31 @@ d3.json("samples.json").then((d) => {
     reversedBySampleValues = slicedBySampleValues.reverse();
     // this is so that plotly can optimize the viewing
 
+    var reversedByOtuIDPlusString = reversedByOtuID.map(string => 'otc ' + string);
+    
     var select = document.getElementById("selDataset");
     var options = data_1.names;
     // computer, you are setting the dropdown menu 
+
+    console.log(reversedByOtuID);
+
+    var textReferenceOtuId = toObject(OtuID);
+    // this will get your SampleValues into an Javascript Object
+    console.log(textReferenceOtuId);
+
+    console.log(getKeyByValue(textReferenceOtuId, reversedByOtuID[0]));
+
+    // now I need to build a new array
+    
+    var textArray = [];
+
+    for (var i = 0; i < reversedByOtuID.length; i++){
+      var thisByNumber = getKeyByValue(textReferenceOtuId, reversedByOtuID[i])
+      textArray.push(otuLabels[thisByNumber])
+    }
+
+    console.log(textArray)
+
 
     for (var i = 0; i < options.length; i++ ) {
       var opt = options[i];
@@ -65,18 +89,46 @@ d3.json("samples.json").then((d) => {
     }
 
     // computer this is what we need to graph 
-    var trace1 = {
-      y: reversedByOtuID,
+    var barTrace1 = {
+      y: reversedByOtuIDPlusString,
       x: reversedBySampleValues,
+      text: textArray,
       type: 'bar',
       orientation: 'h'
     }
 
+    var barLayout = {
+      title: "Belly Button Biodiversity",
+      xaxis: { title: "Sample Values"},
+      yaxis: { title: "Bacteria"}
+    };
 
-    var data = [trace1]
+    var bubbleLayout = {
+      xaxis: { title: "OTU ID"},
+    };
 
-    Plotly.newPlot('bar', data);
+    
+    var bubbleTrace1 = {
+      x: OtuID,
+      y: SampleValues,
+      mode: 'markers',
+      text: otuLabels,
+      marker: {
+        color: OtuID,
+        colorscale: 'YlGnBu',
+        size: SampleValues
+      }
+    };
+
+    console.log(OtuID);
+    console.log(SampleValues);
+
+    var barData = [barTrace1]
+    Plotly.newPlot('bar', barData, barLayout);
    
+    var bubbleData = [bubbleTrace1];
+    Plotly.newPlot('bubble', bubbleData, bubbleLayout);
+
   });
 
   d3.selectAll("body").on('change', getData);
@@ -111,16 +163,21 @@ d3.json("samples.json").then((d) => {
     Plotly.restyle("bar", "y", [reversedByOtuIDRS]);
     Plotly.restyle("bar", "x", [reversedBySampleValuesRS]);
 
+    var OtuIDRestyle = d1.samples[indexNames].otu_ids;
+    var SampleValuesRestyle = d1.samples[indexNames].sample_values;
+
+    Plotly.restyle("bubble", "x", [OtuIDRestyle]);
+    Plotly.restyle("bubble", "y", [SampleValuesRestyle]);
+    
+
   }
 
 // I want to update the x and the y axis
 
 
-
-
-console.log(data_1Names.indexOf('941'))
-// okay cool 
-console.log(typeof selectedOption, selectedOption);
-// this returns a string
+// console.log(data_1Names.indexOf('941'))
+// // okay cool 
+// console.log(typeof selectedOption, selectedOption);
+// // this returns a string
 
 
