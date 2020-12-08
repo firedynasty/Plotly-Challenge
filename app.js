@@ -99,8 +99,7 @@ d3.json("samples.json").then((d) => {
 
     var barLayout = {
       title: "Belly Button Biodiversity",
-      xaxis: { title: "Sample Values"},
-      yaxis: { title: "Bacteria"}
+      xaxis: { title: "Sample Values"}
     };
 
     var bubbleLayout = {
@@ -128,6 +127,30 @@ d3.json("samples.json").then((d) => {
    
     var bubbleData = [bubbleTrace1];
     Plotly.newPlot('bubble', bubbleData, bubbleLayout);
+
+    //append a list
+
+    var metaDataAge = data_1.metadata[0].age;
+    console.log(metaDataAge);
+    var metaDataEthnicity = data_1.metadata[0].ethnicity;
+    console.log(metaDataEthnicity);
+    var metaDataGender = data_1.metadata[0].gender;
+    var metaDataID = data_1.metadata[0].id;
+    var metaDataLocation = data_1.metadata[0].location;
+    var metaDataWfreq = data_1.metadata[0].wfreq;
+
+    metaDataArray = [`Age: ${metaDataAge}`, `Ethnicity: ${metaDataEthnicity}`, `Gender: ${metaDataGender}`, `ID: ${metaDataID}`, `Location: ${metaDataLocation}`, `Wfreq: ${metaDataWfreq}`];
+    console.log(metaDataArray)
+
+    var ul = d3.select('#sample-metadata')
+      .append('ul')
+      .attr("class", "aClass");
+
+    ul.selectAll('li')
+      .data(metaDataArray)
+      .enter()
+      .append('li')
+      .html(String)
 
   });
 
@@ -169,6 +192,29 @@ d3.json("samples.json").then((d) => {
     Plotly.restyle("bubble", "x", [OtuIDRestyle]);
     Plotly.restyle("bubble", "y", [SampleValuesRestyle]);
     
+    var metaDataAge = data_1.metadata[indexNames].age;
+    console.log(metaDataAge);
+    var metaDataEthnicity = data_1.metadata[indexNames].ethnicity;
+    console.log(metaDataEthnicity);
+    var metaDataGender = data_1.metadata[indexNames].gender;
+    var metaDataID = data_1.metadata[indexNames].id;
+    var metaDataLocation = data_1.metadata[indexNames].location;
+    var metaDataWfreq = data_1.metadata[indexNames].wfreq;
+
+    metaDataArray = [`Age: ${metaDataAge}`, `Ethnicity: ${metaDataEthnicity}`, `Gender: ${metaDataGender}`, `ID: ${metaDataID}`, `Location: ${metaDataLocation}`, `Wfreq: ${metaDataWfreq}`];
+    console.log(metaDataArray)
+
+    d3.selectAll(".aClass").remove();
+
+    var ul = d3.select('#sample-metadata')
+      .append('ul')
+      .attr("class", "aClass");
+
+    ul.selectAll('li')
+      .data(metaDataArray)
+      .enter()
+      .append('li')
+      .html(String)
 
   }
 
