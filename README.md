@@ -14,3 +14,6 @@ The bubble chart was made to reflect all of the samples from the json file.  Eac
 
 Choose Test Subject No. to see the corresponding data for the Bar Chart, Bubble Chart, and Demographics. 
 
+## The Code Behind the Scenes
+
+Plotly was used to plot the data.  D3 was used to extract the data.  The data was stored in variables in Javascript.  An event listener was used to change the datasets in Plotly when Test Subject No. was chosen.  
